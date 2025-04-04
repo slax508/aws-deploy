@@ -49,6 +49,8 @@ jobs:
           script: |-
             sudo apt update
             sudo apt install docker.io -y
+            # AWS CLI should ideally be configured with an IAM role on the EC2 instance
+            # that has ECR access. Remove direct credential usage here.
             sudo docker stop myappcontainer || true
             sudo docker rm myappcontainer || true
             sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
