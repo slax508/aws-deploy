@@ -4,7 +4,7 @@ on:
     branches:
       - "main"
 env:
-  AWS_REGION: ap-south-1
+  AWS_REGION: us-east-1
   PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
   SERVER_PUBLIC_IP: ${{ secrets.AWS_PUBLIC_KEY }}
   AWS_ACCOUNT_ID: 590184057108 # Explicitly define the AWS account ID
