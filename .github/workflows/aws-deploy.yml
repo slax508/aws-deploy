@@ -7,6 +7,7 @@ env:
   AWS_REGION: ap-south-1
   PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
   SERVER_PUBLIC_IP: ${{ secrets.AWS_PUBLIC_KEY }}
+  AWS_ACCOUNT_ID: 590184057108 # Explicitly define the AWS account ID
 
 jobs:
   deploy:
@@ -22,7 +23,10 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       - name: Login to AWS ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2 # Using v2 is generally recommended
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          registry-ids: ${{ env.AWS_ACCOUNT_ID }} # Specify the account ID for login
       - name: Build, push docker image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -45,8 +49,6 @@ jobs:
           script: |-
             sudo apt update
             sudo apt install docker.io -y
-            # AWS CLI should ideally be configured with an IAM role on the EC2 instance
-            # that has ECR access. Remove the get-login command here.
             sudo docker stop myappcontainer || true
             sudo docker rm myappcontainer || true
             sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
