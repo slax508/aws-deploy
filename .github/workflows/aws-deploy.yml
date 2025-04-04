@@ -1,6 +1,6 @@
 name: Deploy to AWS
 on:
-  any:
+  commit:
     branches:
       - "main"
 env:
